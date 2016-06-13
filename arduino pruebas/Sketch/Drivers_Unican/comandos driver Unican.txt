@@ -1,0 +1,16 @@
+entradas (enviando el caracter de la tabala assci con ese valor)
+
+1=pedir pin
+2=asignar hora y fecha(enseguida se deben enviar minuto,hora,día,mes,año)
+3=abrir la puerta
+
+salidas (se obtienen como Strings)
+
+1=se ejecuto de forma correcta el cambio de hora y fecha
+1xxxx=los valores de las 'x' son los cuatro digitos de la lectura del pin
+2=el usuario tardo mas de 10 srgundos en introducir su pin
+3=falto algun o algunos parametros para el cambio de hora y fecha
+4=parametro o parametros incorrectos en el cambio de hora y fecha
+5=se presiono el boton para hacer llamadas
+6=se presiono el boton F1
+k=se presiono una tecla para introducri el nip (debe sonar el buzzer)

@@ -1,0 +1,8 @@
+Se debe de instalar el paquete de arduino mk para poder hacer la compilacion y 
+carga del archivo. Este debe de ir en la Rasp para poder hacer la carga del driver.
+
+Despues se debe crear un archivo en la carpeta donde se encuentre un unico archivo 
+INO y ahi poner las configuraciones de la Arduino a la cual se cargue el driver.
+	
+
+
