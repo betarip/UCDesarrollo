@@ -1,8 +1,0 @@
-#!/bin/bash
-echo "Instalacion de Driver"
-
-#Carpeta de Drivers
-alias cdCarpeta="cd /home/ivan/Documents/Arduino"
-cdCarpeta
-ls -l
-
