@@ -1,0 +1,174 @@
+DELIMITER$$
+
+create procedure DarAcceso(
+	in p_usuario 	varchar(29),
+	in p_puerta  	int(11),
+	out p_acceso 	tinyint(1),
+	out p_pin		int(11)
+						)
+begin
+	declare num_rows integer;
+	select count(*)  into num_rows 
+		from puertas 
+		where usuario = p_usuario and puerta = p_puerta;
+	if(num_rows>0) then
+		select pin into p_pin 
+		from usuarios
+		where UUID = p_usuario;
+		set p_acceso = 1;
+	else
+		set p_pin = 0;
+		set p_acceso = 0;
+	end if;
+
+end$$
+
+
+DarAcceso( in p_usuario varchar(29), in p_puerta int(11), out p_acceso tinyint(1), out p_pin int(11) ) 
+
+call DarAcceso("0x3E0x810xBC0xEC",1,@acceso,@pin);
+select @acceso as acceso,@pin as pin
+
+DELIMITER$$
+
+create procedure InsertarProfesor(
+	in i_nombre varchar(120),
+	in i_uuid varchar(44),
+	in i_usuario varchar(100),
+	in i_pass varchar(20),
+	out id int(11),
+	out exito tinyint(1)	
+							)
+begin 
+	declare num_rows integer;
+	select count(*) into num_rows
+		from profesor
+		where uuid = i_uuid;
+	if(num_rows>0) then
+		set exito=0;
+		set id=0;
+	else
+		select count(*) into num_rows
+			from alumno
+			where uuid = i_uuid;
+		if(num_rows>0) then
+			set exito=0;
+			set id=0;
+		else
+			INSERT INTO profesor (nombre, uuid,usuario,pass) values (i_nombre , i_uuid,i_usuario,i_pass);
+			set id = LAST_INSERT_ID();
+			set exito =1;
+		end if;
+	end if;
+end$$
+
+call InsertarProfesor("Isaias Carrea","0x0F0xDB0x2F0xF9","chaycv","654321",@id,@exito);
+select @id as id,@exito as exito
+
+//procedimiento de insertar alumno
+create procedure InsertarAlumno(
+	in i_alumno 	int(11),
+	in i_uuid 		varchar(42),
+	in i_nombre 		varchar(120),
+	out id_out		int(11),
+	out exito		tinyint(1)
+)
+
+begin
+	declare num_rows integer;
+	select count(*) into num_rows
+		from alumno
+		where id_alumno=i_alumno or uuid = i_uuid;
+	if(num_rows > 0) then
+		set exito =0;
+		set id_out = 0;
+	else
+		select count(*) into num_rows
+			from alumno
+			where uuid = i_uuid;
+		if(num_rows>0) then
+			set exito=0;
+			set id_out=0;
+		else
+			insert into alumno(id_alumno, uuid, nombre) values (i_alumno,i_uuid,i_nombre);
+			set id_out = i_alumno;
+			set exito = 1;
+		end if;
+	end if;
+end
+
+call InsertarAlumno(:id_alumno,:i_uuid,:nombre,@id,@exito);
+select @id as id,@exito as exito
+
+//procedimiento de insertar clase
+
+create procedure InsertarClaseAlumno(
+	in i_alumno 	int(11),
+	in i_clase	 	int(11),
+	out id_out		int(11),
+	out exito		tinyint(1)
+)
+
+begin
+	declare num_rows integer;
+	select count(*) into num_rows
+		from registro_alumno_clase
+		where id_alumno=i_alumno and id_clase=i_clase;
+	if(num_rows > 0) then
+		set exito =0;
+		set id_out = 0;
+	else
+		insert into alumno(id_registro, id_alumno, id_clase) values (null,i_alumno,i_clase);
+		set id_out = LAST_INSERT_ID();
+		set exito = 1;
+	end if;
+end
+call InsertarClaseAlumno(:id_alumno,:id_clase,@id,@exito);
+select @id as id,@exito as exito
+
+
+//procedimiento para registrar asistencia
+
+create procedure RegistrarAsistencia(
+	in i_alumno int(11),
+	in i_clase 	int(11),
+	in i_horario int(11),
+	out id_out 	int(11),
+	out exito	tinyint(1)
+)
+
+begin
+	declare num_rows integer;
+	select count(*) into num_rows
+		from horario
+		where id_clase=i_clase and id_horario= i_horario;
+	if(num_rows < 1) then
+		set exito = 0;
+		set id_out = 0;
+	else
+		select count(*) into num_rows
+			from registro_alumno_clase
+			where id_clase=i_clase and id_alumno=i_alumno;
+		if (num_rows > 0) then
+			select COUNT(*) into num_rows
+				from asistencia 
+				where id_clase=25 and id_horario = 18 and id_alumno=1 and hora BETWEEN timestamp(DATE_SUB(NOW(), INTERVAL 60 MINUTE)) AND timestamp(NOW())ORDER BY `asistencia`.`hora` DESC LIMIT 1
+			if (num_rows < 1) then
+				insert into asistencia (id_asistencia,id_clase,id_horario,id_alumno,hora) values (null,i_clase,i_horario,i_alumno,null);
+				set id_out = LAST_INSERT_ID();
+				set exito = 1;
+		else
+			set exito =2;
+			set id_out = 0;
+		end if;
+
+	end if;
+end
+
+//call RegistrarAsistencia(3000,2,1,@id,@exito);
+
+call RegistrarAsistencia(:id_alumno,:id_clase,:id_horario,@id,@exito);
+select @id as id,@exito as exito
+//prueba
+call RegistrarAsistencia(3000,2,2,@id,@exito);
+select @id as id,@exito as exito;

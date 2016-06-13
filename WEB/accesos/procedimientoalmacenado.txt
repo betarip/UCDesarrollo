@@ -1,0 +1,30 @@
+DELIMITER$$
+
+create procedure DarAcceso(
+	in p_usuario 	varchar(29),
+	in p_puerta  	int(11),
+	out p_acceso 	tinyint(1),
+	out p_pin		int(11)
+						)
+begin
+	declare num_rows integer;
+	select count(*)  into num_rows 
+		from puertas 
+		where usuario = p_usuario and puerta = p_puerta;
+	if(num_rows>0) then
+		select pin into p_pin 
+		from usuarios
+		where UUID = p_usuario;
+		set p_acceso = 1;
+	else
+		set p_pin = 0;
+		set p_acceso = 0;
+	end if;
+
+end$$
+
+
+DarAcceso( in p_usuario varchar(29), in p_puerta int(11), out p_acceso tinyint(1), out p_pin int(11) ) 
+
+call DarAcceso("0x3E0x810xBC0xEC",1,@acceso,@pin);
+select @acceso as acceso,@pin as pin
