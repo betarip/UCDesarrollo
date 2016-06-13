@@ -3,6 +3,11 @@ carga del archivo. Este debe de ir en la Rasp para poder hacer la carga del driv
 
 Despues se debe crear un archivo en la carpeta donde se encuentre un unico archivo 
 INO y ahi poner las configuraciones de la Arduino a la cual se cargue el driver.
+
+Despues se debe de tener configurado el acceso por SSH para poder conectarse auto
+maticamente por el ssh-Keygen y que el archivo python con el nombre ssh.py
+
+
 	
 
 

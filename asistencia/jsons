@@ -1,0 +1,36 @@
+//Profesores
+$app->get('/getProfesoresUUID/{uuid}', 'getProfesoresUUID');
+$app->get('/getProfesores/{usuario},{pass}', 'getProfesores');
+$app->post('/postProfesor/{uuid},{nombre},{usuario},{pass}', 'postProfesor');
+//$app->put('/putProfesor/{UUID},{nombre},{usuario},{pass},', 'putProfesor');
+//$app->delete('/deleteUsuario/{usuario}', 'deleteUsuario');
+
+//Clases
+$app->get('/getClase/{id_clase}', 'getClase');
+$app->get('/getClases/{id_profesor}', 'getClases');
+$app->post('/postClase/{nombre},{id_profesor}','postClase');
+//$app->put('/putClase/{nombre},{id_profesor}','putClase');
+
+//Horario
+$app->get('/getHorario/{idHorario}','getHorario');
+$app->get('/getHorarios/{idClase}','getHorarios');
+$app->post('/postHorario/{idClase},{dia},{horaI},{horaF},{aula}','postHorario');
+//$app->put('/putHorario/{idClase},{dia},{horaI},{horaF},{aula}','putUsuario');
+
+//Alumnos
+$app->get('/getAlumnoUUID/{UUID}','getAlumnoUUID');
+$app->get('/getAlumno/{id}','getAlumno');
+$app->post('/postAlumno/{id},{UUID},{nombre}','postAlumno');
+//$app->put('/putAlumno/{id},{UUID},{nombre}','putAlumno');
+
+//Registro de clases
+$app->get('/getRegistroClase/{id_clase}','getRegistroClase');
+$app->get('/getRegistroClaseAlumno/{id_alumno}','getRegistroClaseAlumno');
+$app->post('/postRegistroClaseAlumno/{idClase},{idAlumno}','postRegistroClaseAlumno');
+
+//Asistencia
+$app->get('/getAsistenciaClaseAlumnoID/{idClase},{id}','getAsistenciaClaseAlumnoID');
+$app->get('/getAsistenciaClaseAlumnoUUID/{idClase},{uuid}','getAsistenciaClaseAlumnoUUID');
+
+$app->post('/postAsistenciaID/{idAlumno},{idClase},{idHorario}',"postAsistenciaID");
+$app->post('/postAsistenciaUUID/{uuid},{idClase},{idHorario}',"postAsistenciaUUID");
